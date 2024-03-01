@@ -108,13 +108,19 @@ const Products = (props) => {
   };
   const deleteCartItem = (index) => {
     let newCart = cart.filter((item, i) => index != i);
+    let target =  cart.filter((item, delIndex)=> delIndex==index);
+    let newItems = items.map((item, index)=>{
+      if(item.name==target[0].name)item.instock=item.instock +1;
+      return item;
+
+    })
     setCart(newCart);
+    setItems(newItems);
   };
   const photos = ["apple.png", "orange.png", "beans.png", "cabbage.png"];
 
   let list = items.map((item, index) => {
-    //let n = index + 1049;
-    //let url = "https://picsum.photos/id/" + n + "/50/50";
+  
 
     return (
       <li key={index}>
@@ -128,7 +134,7 @@ const Products = (props) => {
   });
   let cartList = cart.map((item, index) => {
     return (
-      <Accordion.Item key={1+index} eventKey={1 + index}>
+      <Accordion.Item key={1+index} evenKey={1 + index}>
       <Accordion.Header>
         {item.name}
       </Accordion.Header>
@@ -163,8 +169,8 @@ const Products = (props) => {
   
     const restockProducts = (url) => {
       doFetch(url);
-      let newItems = data.map((item) => {
-        let { name, country, cost, instock } = item;
+      let newItems = data.data.map((item) => {
+        let { name, country, cost, instock } = item.attributes;
         return { name, country, cost, instock };
       });
       setItems([...items, ...newItems]);
